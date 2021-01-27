@@ -16,6 +16,12 @@ This Django project implements a catalogue of Grunge rock music.  It has a fully
 
 ## Getting started
 
+### Create an account
+
+Create an account at [https://codetest.livelike.com](https://codetest.livelike.com)
+
+Clone this repository.  Whe you have completed the goals then you can open a Pull Request to the main repository.
+
 ### Set up a virtualenv
 
 ```shell
