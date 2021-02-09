@@ -18,7 +18,7 @@ This Django project implements a catalogue of Grunge rock music.  It has a fully
 
 #### Create an account
 
-Create an account at [https://codetest.livelike.com/user/sign_up](https://codetest.livelike.com/user/sign_up)
+Create an account at [https://code.livelike.com/user/sign_up](https://code.livelike.com/user/sign_up)
 
 #### Fork this repository
 
