@@ -14,6 +14,22 @@ This Django project implements a catalogue of Grunge rock music.  It has a fully
 * Implement the test cases in `tests/test_playlists.py`.  The goal is to have no skipped or failing tests.
 * Update the Django admin with the ability to browse and manage playlists.
 
+## Developing
+
+You can check your work at any time by running:
+
+```shell
+$ make ready
+```
+
+This will run the default code linters and the test suite.  You can format your code to what the linters expect with:
+
+```shell
+$ make format
+```
+
+Please ensure that there are no code format or lint errors.
+
 ## Getting started
 
 #### Create an account
@@ -64,17 +80,3 @@ Log into the Django admin with your superuser account at:
 Browse the REST API at:
 
 [http://localhost:8000/api/v1/](http://localhost:8000/api/v1/).
-
-## Developing
-
-You can check your work at any time by running:
-
-```shell
-$ make ready
-```
-
-This will run the default code linters and the test suite.  You can format your code to what the linters expect with:
-
-```shell
-$ make format
-```
