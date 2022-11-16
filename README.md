@@ -50,7 +50,7 @@ $ source venv/bin/activate
 ### Install dependencies
 
 ```shell
-$ pip install --upgrade pip
+$ pip install --upgrade pip wheel
 $ pip install --requirement=requirements.txt
 ```
 
