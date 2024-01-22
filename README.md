@@ -8,10 +8,18 @@ This Django project implements a catalogue of Grunge rock music.  It has a fully
 2. `Album`
 3. `Track`
 
-## Goals
+If you are applying for a Full Stack role, your submission should satisfy the Full Stack Candidate goals.
+Otherwise, your submission should satisfy the Backend Candidate goals.
+
+## Backend Candidate Goals
 
 * Implement the ability to fetch, create, update, and delete playlists through the REST API.  A playlist should have a `uuid`, a `name`, and contain 0 or more tracks from this catalogue.  The tracks should be orderable in the playlist.
-* Implement the ability to fetch, create, update, and delete playlists through the django templates.  A playlist should have a `uuid`, a `name`, and contain 0 or more tracks from this catalogue.  The tracks should be orderable in the playlist.
+* Implement the test cases in `tests/test_playlists.py`.  The goal is to have no skipped or failing tests.
+* Update the Django admin with the ability to browse and manage playlists.
+
+## Fullstack Candidate Goals
+
+* Implement the ability to fetch, create, update, and delete playlists using Django views and templates.  A playlist should have a `uuid`, a `name`, and contain 0 or more tracks from this catalogue.  The tracks should be orderable in the playlist.
 * Implement the test cases in `tests/test_playlists.py`.  The goal is to have no skipped or failing tests.
 * Update the Django admin with the ability to browse and manage playlists.
 
