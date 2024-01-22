@@ -20,7 +20,6 @@ Otherwise, your submission should satisfy the Backend Candidate goals.
 ## Fullstack Candidate Goals
 
 * Implement the ability to fetch, create, update, and delete playlists using Django views and templates.  A playlist should have a `uuid`, a `name`, and contain 0 or more tracks from this catalogue.  The tracks should be orderable in the playlist.
-* Implement the test cases in `tests/test_playlists.py`.  The goal is to have no skipped or failing tests.
 * Update the Django admin with the ability to browse and manage playlists.
 
 ## Developing
