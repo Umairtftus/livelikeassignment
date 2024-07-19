@@ -22,6 +22,19 @@ Otherwise, your submission should satisfy the Backend Candidate goals.
 * Implement the ability to fetch, create, update, and delete playlists using Django views and templates.  A playlist should have a `uuid`, a `name`, and contain 0 or more tracks from this catalogue.  The tracks should be orderable in the playlist.
 * Update the Django admin with the ability to browse and manage playlists.
 
+
+## Django Code Assessment Criteria
+
+Used for Backend and Fullstack role code assessments.
+
+* Ability to run the project. Reviewers should be able to run the project locally using standard processes like `manage.py` or Foreman.
+* Tidiness of the source code repository. No stray files like logs, virtual environments, databases, etc.
+* Adherence to Python code style established by the community standards like PEP-8.
+* Conformance to the Django Architecture. Proper use of models, views, templates, and preferring features and utilities provided by Django rather than candidate rolling their own.
+* Cohesiveness of the project. No missing files, broken styles, stub features, etc.
+* Submission process adherence. Submission should be a pull request. Commits should be atomic with clear messages.
+
+
 ## Developing
 
 You can check your work at any time by running:
