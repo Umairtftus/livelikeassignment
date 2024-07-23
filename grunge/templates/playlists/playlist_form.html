@@ -1,8 +1,9 @@
-{% extends "base_generic.html" %}
-
-{% block content %}
+{% extends 'playlists/base.html' %}
+{% load static %}
+{% block title %}Playlist Dashboard{% endblock title %}
+{% block body %}
   <h2>{% if object %}Update{% else %}Create{% endif %} Playlist</h2>
-  <form method="post">
+  <form class="form-control" id="createPlaylistForm" method="post">
     {% csrf_token %}
     {{ form.as_p }}
     {{ tracks.management_form }}
@@ -11,7 +12,8 @@
         {{ form.as_p }}
       {% endfor %}
     </table>
-    <button type="submit">Save</button>
-  </form>
+    <button class = "btn btn-primary" type="submit">Save</button>
   <a href="{% url 'playlist_list' %}">Cancel</a>
+  </form>
+
 {% endblock %}
