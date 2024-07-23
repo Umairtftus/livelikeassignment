@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Dashboard{% endblock title %}
+{% block body %}
+    <div id="modalDialog" class="modal" style="max-width: 100%;">
+        <div class="modal-content animate-top" style="width: 350px;">
+            <div class="modal-header">
+                <h5 class="modal-title">Create Playlist</h5>
+                <button type="button" class="close">
+                    <span aria-hidden="true">x</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="createPlaylistForm" action="" method="POST">
+                    {% csrf_token %}
+                    <table>
+                        <tr>
+                            <td>Name</td>
+                            <td><p></p></td>
+                            <td>{{ form.name }}</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td><p></p></td>
+                            <td>{{ form.name.help_text }}</td>
+                        </tr>
+                    </table>
+                </form>
+                <button id="createPlaylist" style="float: right; margin: 10px;" type="submit" class="btn btn-primary">Create</button>
+            </div>
+        </div>
+    </div>
+    <button id="mbtn" class="btn btn-primary" style="float: right; margin: 20px 0;">Create Playlist</button>
+    <table id="playlist_data" class="playlist_class cell-border compact stripe">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Tracks Count</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in playlists %}
+                <tr>
+                    <td><a href="{% url 'view_playlist' uuid=item.uuid %}">{{item.id}}</a></td>
+                    <td id="playlist_{{ forloop.counter }}_name" contenteditable>{{item.name}}</td>
+                    <td>{{item.tracks_count}}</td>
+                    <td class="dt-body-center">
+                        <button type="button" class="btn btn-primary" onclick="editPlaylist(event)" data_uuid="{{item.uuid}}" data_name="#playlist_{{ forloop.counter }}_name">Save</button>
+                        <button type="button" class="btn btn-danger" onclick="deletePlaylist(event)" data_uuid="{{item.uuid}}">Delete</button>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock body %}
+{% block script %}
+    <script src="{% static 'js/library.js' %}"></script>
+    <script type = "text/javascript">
+        var dataTable
+        var modal
+        var btn
+        var span
+
+        $(document).ready(function(){
+            modal = $('#modalDialog')
+            btn = $("#mbtn")
+            span = $(".close")
+            
+            dataTable = $('#playlist_data').DataTable(
+                {
+                    columnDefs: [{
+                        "targets": 3,
+                        "orderable": false
+                    }],
+                    order: [[1, 'asc']],
+                    lengthMenu: [10,20,50,100],
+                }
+            )
+
+            btn.on('click', function() {
+                modal.show();
+            })
+            
+            span.on('click', function() {
+                modal.fadeOut();
+            })
+
+            $('#createPlaylist').on('click', function() {
+                $('#createPlaylistForm').submit()
+            })
+        })
+
+        $('body').bind('click', function(e){
+            if($(e.target).hasClass("modal")){
+                modal.fadeOut()
+            }
+        })
+
+        function editPlaylistCallback(event, response) {
+            const uuid = event.target.getAttribute("data_uuid")
+            console.log(`Playlist with uuid ${uuid} edited sccessfully`)
+            location.reload()
+        }
+
+        function editPlaylist(event) {
+            const uuid = event.target.getAttribute("data_uuid")
+            apiRequest(
+                `/api/v1/playlist/${uuid}`,
+                'PATCH',
+                event,
+                editPlaylistCallback,
+                {
+                    "name": document.querySelector(event.target.getAttribute("data_name")).innerText
+                },
+                {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                }
+            )
+        }
+
+        function deletePlaylistCallback(event, response) {
+            const uuid = event.target.getAttribute("data_uuid")
+            console.log(`Playlist with uuid ${uuid} deleted sccessfully`)
+            location.reload()
+        }
+
+        function deletePlaylist(event) {
+            const uuid = event.target.getAttribute("data_uuid")
+            apiRequest(
+                `/api/v1/playlist/${uuid}`,
+                'DELETE',
+                event,
+                deletePlaylistCallback,
+            )
+        }
+    </script>
+{% endblock script %}

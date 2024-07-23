@@ -7,7 +7,8 @@ from django.utils.translation import gettext as _
 from furl import furl
 from rest_framework.reverse import reverse as drf_reverse
 
-from .models import Album, Artist, Track
+from .models import Album, Artist, Track, Playlist, TrackAndOrder
+
 
 # test..
 
@@ -187,6 +188,7 @@ class AlbumAdmin(admin.ModelAdmin):
     album_api_link.short_description = _("API")
 
 
+
 @admin.register(Track)
 class TrackAdmin(admin.ModelAdmin):
     list_display = ("name", "artist_admin_link", "album_admin_link", "album_year")
@@ -242,3 +244,18 @@ class TrackAdmin(admin.ModelAdmin):
         return get_api_url(track, request=self.request)
 
     track_api_link.short_description = _("API")
+
+
+@admin.register(Playlist)
+class PlaylistAdmin(admin.ModelAdmin):
+    list_display = ("uuid","name")
+    list_filter = ("uuid","name")
+    search_fields = ("uuid", "name")
+
+# admin.site.register(Playlist)
+
+@admin.register(TrackAndOrder)
+class TrackAndOrderAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in TrackAndOrder._meta.get_fields()]
+    list_filter = ("uuid","track__name","playlist__name","order")
+    search_fields = ("uuid","track__name","playlist__name","order")

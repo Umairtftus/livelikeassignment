@@ -1,4 +1,4 @@
-.PHONY: lint format test testfast ready dumpinitialdata
+.PHONY: lint format test testfast ready dumpinitialdata run
 
 format:
 	isort --atomic --skip-glob="venv/*" grunge
@@ -19,3 +19,7 @@ ready: lint testfast
 dumpinitialdata:
 	python manage.py dumpdata --natural-foreign --natural-primary \
 		--exclude=admin.logentry --all --indent=2 > grunge/fixtures/initial_data.json
+
+run:
+	python manage.py runserver
+
