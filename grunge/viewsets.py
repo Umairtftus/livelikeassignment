@@ -103,9 +103,11 @@ class PlaylistViewSet(viewsets.ModelViewSet):
         else:
             return Response({"msg": "Unable to delete!"}, status=status.HTTP_200_OK)
 
-    @action(detail=True, methods=['GET'], name='Reorder Track', url_path="reorder1/<str:trackid>/<str:position>/")
-    def reorder(self, request,version,trackid,position, *args,**kwargs):
-        return Response({"msg":"Successfully fetched!"})
+    @action(detail=True, methods=['PATCH'], name='Reorder Track', url_path="reorder1/<str:trackid>/<str:position>/")
+    def reorder(self, request, version, trackid, position, *args, **kwargs):
+        track_ans_order = self.get_object()
+        curr_track = track_ans_order.get()
+        return Response({"msg": "Successfully fetched!"})
 
 
 

@@ -1,0 +1,29 @@
+<!-- templates/base_generic.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}LiveLike Assignment{% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <header>
+        <h1>My Site</h1>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="{% url 'playlist_list' %}">Playlists</a></li>
+            <!-- Add more navigation links here -->
+        </ul>
+    </nav>
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+    <footer>
+        <p>&copy; 2024 TFT</p>
+    </footer>
+</body>
+</html>

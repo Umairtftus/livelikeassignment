@@ -1,0 +1,21 @@
+<!-- templates/playlists/playlist_order_form.html -->
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h2>Update Order for {{ playlist.name }}</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ formset.management_form }}
+    <table>
+      {% for form in formset %}
+        <tr>
+          <td>{{ form.track.label_tag }} {{ form.track }}</td>
+          <td>{{ form.order.label_tag }} {{ form.order }}</td>
+          <td>{{ form.DELETE.label_tag }} {{ form.DELETE }}</td>
+        </tr>
+      {% endfor %}
+    </table>
+    <button type="submit">Save Order</button>
+  </form>
+  <a href="{% url 'playlist_detail' playlist.pk %}">Cancel</a>
+{% endblock %}

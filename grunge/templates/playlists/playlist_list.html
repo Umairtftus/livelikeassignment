@@ -1,0 +1,11 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h2>Playlists</h2>
+  <ul>
+    {% for playlist in object_list %}
+      <li><a href="{% url 'playlist_detail' playlist.uuid %}">{{ playlist.name }}</a></li>
+    {% endfor %}
+  </ul>
+  <a href="{% url 'playlist_create' %}">Create a new playlist</a>
+{% endblock %}
