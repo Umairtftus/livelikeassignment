@@ -106,9 +106,19 @@ Browse the REST API at:
 
 ## Django Code Assessment Solution:
 
+### Initialize the development database by loading solution data
+
+```shell
+$ python manage.py migrate
+$ python manage.py loaddata assignment_solution_data
+```
+
+
+
 ### TO CHECK THE APIS open the following link:
 [http://127.0.0.1:8000/swagger/](http://127.0.0.1:8000/swagger/)
 
 
 ### To check the templates you can visit:
 [http://localhost:8000/dashboard](http://localhost:8000/dashboard)
+

@@ -33,14 +33,13 @@ class PlaylistDetailView(DetailView):
         return self.render_to_response(self.get_context_data(form=form))
 
 
-@method_decorator(csrf_exempt, name='dispatch')
 class PlaylistCreateView(CreateView):
     model = Playlist
     form_class = PlaylistForm
     template_name = "playlists/playlist_form.html"
     success_url = reverse_lazy("playlist_list")
 
-@method_decorator(csrf_exempt, name='dispatch')
+
 class PlaylistUpdateView(UpdateView):
     model = Playlist
     form_class = PlaylistForm
@@ -90,7 +89,6 @@ class PlaylistUpdateView(UpdateView):
         return super().form_valid(form)
 
 
-@method_decorator(csrf_exempt, name='dispatch')
 class PlaylistDeleteView(DeleteView):
     model = Playlist
     template_name = "playlists/playlist_confirm_delete.html"
@@ -122,7 +120,6 @@ class PlaylistAddTracksView(UpdateView):
         return super().form_valid(form)
 
 
-@method_decorator(csrf_exempt, name='dispatch')
 class ChangeOrder(View):
     def post(self, request, pk):
         """
