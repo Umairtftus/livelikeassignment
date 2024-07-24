@@ -95,15 +95,19 @@ class TrackAndOrderSerializer(serializers.ModelSerializer):
     track_id = serializers.ReadOnlyField(source="track.id")
     playlist_name = serializers.ReadOnlyField(source="playlist.name")
     playlist_id = serializers.ReadOnlyField(source="playlist.id")
+    playlist_track_details = UUIDHyperlinkedIdentityField(view_name="playlisttrack-detail")
 
     class Meta:
         model = TrackAndOrder
-        read_only_fields = ("uuid","order","track_name","playlist_name")
-        fields = ("uuid","track", "playlist","order","track_name","playlist_name","playlist_id","track_id")
+        read_only_fields = ("uuid", "order", "track_name", "playlist_name")
+        fields = ("uuid", "track", "playlist", "order", "track_name", "playlist_name", "playlist_id", "track_id", "playlist_track_details")
 
     def save(self, **kwargs):
-        if TrackAndOrder.objects.filter(playlist=self.validated_data['playlist'],track=self.validated_data['track']).exists():
-            return TrackAndOrder.objects.filter(playlist=self.validated_data['playlist'],track=self.validated_data['track'])
-        order =  TrackAndOrder.objects.filter(playlist=self.validated_data['playlist']).count()+1
+        if TrackAndOrder.objects.filter(playlist=self.validated_data['playlist'],
+                                        track=self.validated_data['track']).exists():
+            return TrackAndOrder.objects.filter(playlist=self.validated_data['playlist'],
+                                                track=self.validated_data['track'])
+        order = TrackAndOrder.objects.filter(playlist=self.validated_data['playlist']).count() + 1
 
-        return TrackAndOrder.objects.create(playlist=self.validated_data['playlist'],track=self.validated_data['track'], order=order)
+        return TrackAndOrder.objects.create(playlist=self.validated_data['playlist'],
+                                            track=self.validated_data['track'], order=order)
