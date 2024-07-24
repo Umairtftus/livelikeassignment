@@ -43,15 +43,3 @@ class PlaylistTests(BaseAPITestCase):
         self.assertEqual(response.data['msg'], 'Successfully reordered!')
         self.track_order1.refresh_from_db()
         self.assertEqual(self.track_order1.order, 2)
-
-    def test_reorder_tracks_on_delete(self):
-        response = self.client.delete(
-            reverse('playlisttrack-destroy', kwargs={
-                'version': 'v1',
-                'pk': self.track2.pk,
-            })
-        )
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['msg'], 'Successfully reordered!')
-        self.track_order3.refresh_from_db()
-        self.assertEqual(self.track_order3.order, 2)

@@ -43,6 +43,8 @@ class TrackViewSet(BaseAPIViewSet):
 
 
 class PlaylistNameViewSet(viewsets.ModelViewSet):
+    lookup_field = "uuid"
+    lookup_url_kwarg = "uuid"
     queryset = Playlist.objects.all()
     serializer_class = PlaylistNameSerializer
     filter_class = PlaylistNameFilter
@@ -103,7 +105,6 @@ class PlaylistViewSet(viewsets.ModelViewSet):
         return Response(serialized_data.data, status=status.HTTP_200_OK)
 
     def destroy(self, request, version, uuid=None):
-        pdb.set_trace()
         playlist = get_object_or_404(self.queryset, uuid=uuid)
 
         if playlist:

@@ -21,12 +21,12 @@ if settings.DJANGO_ADMIN_ENABLED:
     urlpatterns += [
         re_path("^$", RedirectView.as_view(url="/admin/", permanent=True)),
         path("playlists/", PlaylistListView.as_view(), name="playlist_list"),
-        path("playlists/<uuid:pk>/", PlaylistDetailView.as_view(), name="playlist_detail"),
+        path("playlists/<int:pk>/", PlaylistDetailView.as_view(), name="playlist_detail"),
         path("playlists/create/", PlaylistCreateView.as_view(), name="playlist_create"),
-        path("playlists/<uuid:pk>/add-tracks/", PlaylistAddTracksView.as_view(), name="playlist_add_tracks"),
-        path("playlists/<uuid:pk>/update/", PlaylistUpdateView.as_view(), name="playlist_update"),
-        path("playlists/<uuid:pk>/delete/", PlaylistDeleteView.as_view(), name="playlist_delete"),
-        path("playlists/<uuid:pk>/change-order/", change_track_order, name="change_track_order"),
+        path("playlists/<int:pk>/add-tracks/", PlaylistAddTracksView.as_view(), name="playlist_add_tracks"),
+        path("playlists/<int:pk>/update/", PlaylistUpdateView.as_view(), name="playlist_update"),
+        path("playlists/<int:pk>/delete/", PlaylistDeleteView.as_view(), name="playlist_delete"),
+        path("playlists/<int:pk>/change-order/", change_track_order, name="change_track_order"),
         path("admin/", admin.site.urls),
     ]
 

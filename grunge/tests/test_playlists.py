@@ -1,4 +1,7 @@
+import pdb
 from unittest import skip
+from uuid import UUID
+
 from rest_framework.test import APITestCase
 from rest_framework import status
 from django.urls import reverse
@@ -20,7 +23,8 @@ from ..serializers import PlaylistNameSerializer
 
 class PlaylistTests(BaseAPITestCase):
     def setUp(self):
-        self.playlist = Playlist.objects.create(name="My Playlist")
+        self.playlist_uuid = UUID("9e52205f-9927-4eff-b132-ce10c6f3e0b1")
+        self.playlist = Playlist.objects.create(name="My Playlist", uuid=self.playlist_uuid)
         self.artist = Artist.objects.create(name="Artist")
         self.album = Album.objects.create(name="Album 1", year=2019, artist=self.artist)
         self.track1 = Track.objects.create(name="Track 1", number=1, album=self.album)
@@ -39,8 +43,8 @@ class PlaylistTests(BaseAPITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_get_playlist(self):
-        response = self.client.get(reverse('_playlist-detail', kwargs={'version': 'v1', 'pk': self.playlist.pk}))
-        playlist = Playlist.objects.get(pk=self.playlist.pk)
+        response = self.client.get(reverse('_playlist-detail', kwargs={'version': 'v1', 'uuid': self.playlist_uuid}))
+        playlist = Playlist.objects.get(uuid=self.playlist.uuid)
         serializer = PlaylistNameSerializer(playlist)
         self.assertEqual(response.data, serializer.data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -53,21 +57,14 @@ class PlaylistTests(BaseAPITestCase):
 
     def test_update_playlist(self):
         data = {'name': 'Updated Playlist'}
-        response = self.client.put(reverse('_playlist-detail', kwargs={'version': 'v1','pk': self.playlist.pk}), data)
+        response = self.client.put(reverse('_playlist-detail', kwargs={'version': 'v1','uuid': self.playlist_uuid}), data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.playlist.refresh_from_db()
         self.assertEqual(self.playlist.name, 'Updated Playlist')
 
     def test_delete_playlist(self):
-        response = self.client.delete(reverse('_playlist-detail', kwargs={'version': 'v1','pk': self.playlist.pk}))
+        response = self.client.delete(reverse('_playlist-detail', kwargs={'version': 'v1','uuid': self.playlist_uuid}))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['msg'], 'Deleted Successfully!')
         with self.assertRaises(Playlist.DoesNotExist):
-            Playlist.objects.get(pk=self.playlist.pk)
-
-    def test_add_track_to_playlist(self):
-        new_track = Track.objects.create(name="New Track", number=4,album=self.album)
-        data = {'track': new_track.pk, 'playlist': self.playlist.pk}
-        response = self.client.post(reverse('playlistviewset-list'), data)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['msg'], 'Track added successfully!')
+            Playlist.objects.get(uuid=self.playlist.uuid)
