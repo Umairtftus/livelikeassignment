@@ -21,29 +21,29 @@
   {% if object.playlist_tracks.all|length < 1 %}
   <h3 class="m-5"style="text-align:center;">No tracks in playlist! Click on <a href="{% url 'playlist_add_tracks' object.pk %}">here</a> to add tracks</h3>
   {% else %}
-  <ul>
-    {% for playlist_track in object.playlist_tracks.all %}
+
+  {% for playlist_track in object.playlist_tracks.all %}
+  <div class="container">
     <div class="row m-3">
-      <li>
-        <form class="form-control"  method="post" action="{% url 'change_track_order' object.pk %}">
-          {% csrf_token %}
-          <input type="hidden" name="track_id" value="{{ playlist_track.track.pk }}">
-          <strong>Song Name: {{ playlist_track.track.name }}<strong> - Order:
-            <div class="col-md-12">
-              <div class="row">
-                <div class="col-md-6">
-                  <input class="form-control" type="number" name="order" value="{{ playlist_track.order }}" min="1">
-                </div>
-                <div class="col-md-6">
-                  <button class="btn btn-primary col-md-3" type="submit" style>Change Order</button>
-                </div>
+
+      <form class  method="post" action="{% url 'change_track_order' object.pk %}">
+        {% csrf_token %}
+        <input type="hidden" name="track_id" value="{{ playlist_track.track.pk }}">
+        <strong>Song Name: {{ playlist_track.track.name }}<strong> - Order:
+          <div class="col-md-12">
+            <div class="row">
+              <div class="col-md-6">
+                <input class="form-control" type="number" name="order" value="{{ playlist_track.order }}" min="1">
+              </div>
+              <div class="col-md-6">
+                <button class="btn btn-primary col-md-3" type="submit" style>Change Order</button>
               </div>
             </div>
-        </form>
-      </li>
+          </div>
+      </form>
     </div>
-    {% endfor %}
-  </ul>
+  </div>
+  {% endfor %}
   {% endif %}
 
 </div>

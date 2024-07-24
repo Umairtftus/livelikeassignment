@@ -1,17 +1,24 @@
 {% extends 'playlists/base.html' %}
 {% load static %}
+
 {% block title %}Playlist Dashboard{% endblock title %}
 {% block body %}
 <div class="container">
-<h2>Add Tracks to Playlist</h2>
-<form class="form-group" method="post">
-    {% csrf_token %}
-    {{ form.as_ul }}
-    {{ tracks.management_form }}
-    {% for form in tracks %}
-        {{ form.as_ul }}
-        <button class="btn btn-primary m-2" type="submit">Save</button>
-    {% endfor %}
-</form>
+    <h2>Add Tracks to Playlist</h2>
+    <form method="post" >
+        {% csrf_token %}
+        {{ form }}
+        {{ tracks.management_form }}
+        {% for form in tracks %}
+        {{ form}}
+        <div class="row">
+            <div class="col-lg-12">
+                <button class="btn btn-primary m-2 col-md-3" style="float:right;" type="submit">Save</button>
+            </div>
+        </div>
+
+        <hr>
+        {% endfor %}
+    </form>
     <div>
-{% endblock body %}
+        {% endblock body %}

@@ -3,19 +3,19 @@
 {% block title %}Playlist ss{% endblock title %}
 {% block body %}
 <h2>Update Order for {{ playlist.name }}</h2>
-  <form class="form-control" method="post">
-    {% csrf_token %}
-    {{ formset.management_form }}
-    <table class="table table-bordered">
-      {% for form in formset %}
-        <tr>
-          <td>{{ form.track.label_tag }} {{ form.track }}</td>
-          <td>{{ form.order.label_tag }} {{ form.order }}</td>
-          <td>{{ form.DELETE.label_tag }} {{ form.DELETE }}</td>
-        </tr>
-      {% endfor %}
-    </table>
-    <button type="submit">Save Order</button>
-  </form>
-  <a href="{% url 'playlist_detail' playlist.pk %}">Cancel</a>
+<form class="form-control" method="post">
+  {% csrf_token %}
+  {{ formset.management_form }}
+  <table class="table table-bordered">
+    {% for form in formset %}
+    <tr>
+      <td>{{ form.track.label_tag }} {{ form.track }}</td>
+      <td>{{ form.order.label_tag }} {{ form.order }}</td>
+      <td>{{ form.DELETE.label_tag }} {{ form.DELETE }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+  <button type="submit">Save Order</button>
+</form>
+<a href="{% url 'playlist_detail' playlist.pk %}">Cancel</a>
 {% endblock body %}

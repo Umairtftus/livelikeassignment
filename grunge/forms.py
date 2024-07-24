@@ -8,13 +8,26 @@ from .models import Playlist, TrackAndOrder
 
 
 class PlaylistForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        for visible in self.visible_fields():
+            visible.field.widget.attrs["class"] = "form-control"
+            visible.field.widget.attrs["placeholder"] = visible.field.label
+
     class Meta:
         model = Playlist
         fields = ["name"]
 
 
-
 class PlaylistTrackForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        for visible in self.visible_fields():
+            visible.field.widget.attrs["class"] = "form-control"
+            visible.field.widget.attrs["placeholder"] = visible.field.label
+
     class Meta:
         model = TrackAndOrder
         fields = ["track", "order"]

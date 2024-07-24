@@ -1,8 +1,4 @@
-import pdb
-
-from django.db import transaction
-from django.db.models import Max, F
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views import View
@@ -24,7 +20,6 @@ class PlaylistDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['form'] = PlaylistTrackForm()
-
         return context
 
     def post(self, request, *args, **kwargs):
@@ -63,16 +58,13 @@ class PlaylistUpdateView(UpdateView):
         context = self.get_context_data()
         tracks = context["tracks"]
         curr_tracks = TrackAndOrder.objects.filter(playlist=self.object)
-
         # Track initial orders
         initial_orders = {track.id: track.order for track in curr_tracks}
         self.object = form.save()
         instances = tracks.save(commit=False)
-
         for instance in instances:
             if instance.id not in initial_orders:
                 initial_orders[instance.id] = instance.order
-
         for instance in instances:
             if initial_orders[instance.id] >= instance.order:
                 for track_id in initial_orders:
@@ -83,22 +75,18 @@ class PlaylistUpdateView(UpdateView):
                     if initial_orders[track_id] <= instance.order:
                         initial_orders[track_id] += 1
             initial_orders[instance.id] = instance.order
-
         # Apply the updated orders
         for instance in instances:
             instance.order = initial_orders[instance.id]
             instance.playlist = self.object
             instance.save()
-
         # Save the formset
         tracks.save_m2m()
-
         # Adjust and save existing tracks not in instances
         for track in curr_tracks:
             if track.id not in initial_orders:
                 track.order = initial_orders[track.id]
                 track.save()
-
         return super().form_valid(form)
 
 
@@ -107,7 +95,6 @@ class PlaylistDeleteView(DeleteView):
     model = Playlist
     template_name = "playlists/playlist_confirm_delete.html"
     success_url = "/playlists/"
-
 
 
 class PlaylistAddTracksView(UpdateView):
@@ -124,6 +111,10 @@ class PlaylistAddTracksView(UpdateView):
         return data
 
     def form_valid(self, form):
+        """
+        This function changes the track order
+        :form: Form object
+        """
         context = self.get_context_data()
         tracks = context["tracks"]
         if tracks.is_valid():
@@ -133,7 +124,7 @@ class PlaylistAddTracksView(UpdateView):
 
 @method_decorator(csrf_exempt, name='dispatch')
 class ChangeOrder(View):
-    def post(self,request, pk):
+    def post(self, request, pk):
         """
         This function changes the track order
         :request: A HTTP Request
@@ -148,7 +139,6 @@ class ChangeOrder(View):
             new_position = min(new_position, playlist_tracks.count())
             current_track = playlist_tracks.get(track=track)
             current_order = current_track.order
-
             if current_order < new_position:
                 # Moving the track down
                 for track in playlist_tracks:
@@ -161,8 +151,6 @@ class ChangeOrder(View):
                     if new_position <= track.order < current_order:
                         track.order += 1
                         track.save()
-
             current_track.order = new_position
             current_track.save()
-
         return redirect(reverse('playlist_detail', args=[pk]))

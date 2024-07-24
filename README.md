@@ -101,3 +101,14 @@ Log into the Django admin with your superuser account at:
 Browse the REST API at:
 
 [http://localhost:8000/api/v1/](http://localhost:8000/api/v1/).
+
+
+
+## Django Code Assessment Solution:
+
+### TO CHECK THE APIS open the following link:
+[http://127.0.0.1:8000/swagger/](http://127.0.0.1:8000/swagger/)
+
+
+### To check the templates you can visit:
+[http://localhost:8000/dashboard](http://localhost:8000/dashboard)

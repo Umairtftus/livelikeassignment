@@ -21,24 +21,24 @@
 </head>
 
 <body >
-    <!-- <h1 class="block-effect" style="--td: 0.5s"> -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="#" style="margin-left:5px;">Grunge</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-    <div class="navbar-nav">
-      <a class="nav-item nav-link active" href="{% url 'playlist_list' %}">Home <span class="sr-only">(current)</span></a>
-        <a class="nav-item nav-link" href="{% url 'playlist_list' %}">Playlists</a>
-      </div>
-  </div>
-</nav>
-    <div class="container">
-        {% block body %}{% endblock body %}
+<!-- <h1 class="block-effect" style="--td: 0.5s"> -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#" style="margin-left:5px;">Grunge</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+            <a class="nav-item nav-link active" href="{% url 'playlist_list' %}">Home <span class="sr-only">(current)</span></a>
+            <a class="nav-item nav-link" href="{% url 'playlist_list' %}">Playlists</a>
+        </div>
     </div>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
-    {% block script %}{% endblock script %}
+</nav>
+<div class="container">
+    {% block body %}{% endblock body %}
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+{% block script %}{% endblock script %}
 </body>
 
 </html>

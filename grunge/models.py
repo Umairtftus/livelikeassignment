@@ -99,6 +99,7 @@ class Playlist(UUIDModel):
     def get_absolute_url(self):
         return reverse("playlist_detail", kwargs={"pk": self.pk})
 
+
 class TrackAndOrder(UUIDModel):
     track = models.ForeignKey(Track, help_text=_("Track refers to the playlist"),
                               related_name="track",
@@ -109,7 +110,6 @@ class TrackAndOrder(UUIDModel):
     playlist = models.ForeignKey(Playlist, null=True, help_text=_("The playlist of the track"),
                                  related_name="playlist_tracks",
                                  on_delete=models.CASCADE)
-
 
     def get_absolute_url(self):
         return reverse("admin:grunge_trackandorder_change", kwargs={"object_id": self.pk})
