@@ -86,24 +86,6 @@ class PlaylistViewSet(viewsets.ModelViewSet):
     serializer_class = TrackAndOrderSerializer
     filter_class = TrackAndOrderFilter
 
-    def list(self, request, version):
-        serialized_data = self.serializer_class(self.queryset, many=True)
-        return Response(serialized_data.data, status=status.HTTP_200_OK)
-
-    def create(self, request, *args, **kwargs):
-
-        serializer = self.serializer_class(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response({"msg": "Track added successfully!"}, status=status.HTTP_200_OK)
-        else:
-            return Response({"msg": "Unable to add track !!"}, status=status.HTTP_400_BAD_REQUEST)
-
-    def retrieve(self, request, version, uuid=None):
-        playlist = get_object_or_404(self.queryset, uuid=uuid)
-        serialized_data = self.serializer_class(playlist)
-        return Response(serialized_data.data, status=status.HTTP_200_OK)
-
     def destroy(self, request, version, uuid=None):
         playlist = get_object_or_404(self.queryset, uuid=uuid)
 
