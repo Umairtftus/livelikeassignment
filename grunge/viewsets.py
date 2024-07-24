@@ -86,13 +86,21 @@ class PlaylistViewSet(viewsets.ModelViewSet):
     serializer_class = TrackAndOrderSerializer
     filter_class = TrackAndOrderFilter
 
+    def create(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"msg": "Playlist added successfully!"}, status=status.HTTP_200_OK)
+        else:
+            return Response({"msg": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+
     def destroy(self, request, version, uuid=None):
         playlist = get_object_or_404(self.queryset, uuid=uuid)
-
         if playlist:
             playlist.delete()
             # Reordering the playlist order
-            TrackAndOrder.object.filter(playlist=playlist.playlist, order__gte=playlist.order).update(order=F('order') - 1)
+            TrackAndOrder.objects.filter(playlist=playlist.playlist, order__gte=playlist.order).update(order=F('order') - 1)
             return Response({"msg": "Deleted Successfully!"}, status=status.HTTP_200_OK)
         else:
             return Response({"msg": "Unable to delete!"}, status=status.HTTP_200_OK)
