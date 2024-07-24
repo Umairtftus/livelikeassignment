@@ -63,13 +63,13 @@ class PlaylistNameViewSet(viewsets.ModelViewSet):
         else:
             return Response({"msg": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
-    def retrieve(self, request, version, pk=None):
-        playlist = get_object_or_404(self.queryset, pk=pk)
+    def retrieve(self, request, version, uuid=None):
+        playlist = get_object_or_404(self.queryset, uuid=uuid)
         serialized_data = self.serializer_class(playlist)
         return Response(serialized_data.data, status=status.HTTP_200_OK)
 
-    def destroy(self, request, version, pk=None):
-        playlist = get_object_or_404(self.queryset, pk=pk)
+    def destroy(self, request, version, uuid=None):
+        playlist = get_object_or_404(self.queryset, uuid=uuid)
         if playlist:
             playlist.delete()
             return Response({"msg": "Deleted Successfully!"}, status=status.HTTP_200_OK)
@@ -78,6 +78,8 @@ class PlaylistNameViewSet(viewsets.ModelViewSet):
 
 
 class PlaylistViewSet(viewsets.ModelViewSet):
+    lookup_field = "uuid"
+    lookup_url_kwarg = "uuid"
     queryset = TrackAndOrder.objects.all()
     serializer_class = TrackAndOrderSerializer
     filter_class = TrackAndOrderFilter
@@ -95,14 +97,14 @@ class PlaylistViewSet(viewsets.ModelViewSet):
         else:
             return Response({"msg": "Unable to add track !!"}, status=status.HTTP_400_BAD_REQUEST)
 
-    def retrieve(self, request, version, pk=None):
-        playlist = get_object_or_404(self.queryset, pk=pk)
+    def retrieve(self, request, version, uuid=None):
+        playlist = get_object_or_404(self.queryset, uuid=uuid)
         serialized_data = self.serializer_class(playlist)
         return Response(serialized_data.data, status=status.HTTP_200_OK)
 
-    def destroy(self, request, version, pk=None):
+    def destroy(self, request, version, uuid=None):
         pdb.set_trace()
-        playlist = get_object_or_404(self.queryset, pk=pk)
+        playlist = get_object_or_404(self.queryset, uuid=uuid)
 
         if playlist:
             playlist.delete()

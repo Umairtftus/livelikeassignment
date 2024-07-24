@@ -11,7 +11,7 @@ class UUIDManager(models.Manager):
 
 
 class UUIDModel(models.Model):
-    uuid = models.UUIDField(verbose_name="UUID", default=uuid4, unique=True, primary_key=True)
+    uuid = models.UUIDField(verbose_name="UUID", default=uuid4, unique=True)
     objects = UUIDManager()
 
     class Meta:

@@ -1,0 +1,11 @@
+<!-- templates/playlists/playlist_add_tracks.html -->
+<h2>Add Tracks to Playlist</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    {{ tracks.management_form }}
+    {% for form in tracks %}
+        {{ form.as_p }}
+        <button type="submit">Save</button>
+    {% endfor %}
+</form>
