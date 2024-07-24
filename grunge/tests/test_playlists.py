@@ -65,4 +65,9 @@ class PlaylistTests(BaseAPITestCase):
         with self.assertRaises(Playlist.DoesNotExist):
             Playlist.objects.get(pk=self.playlist.pk)
 
-
+    def test_add_track_to_playlist(self):
+        new_track = Track.objects.create(name="New Track", number=4,album=self.album)
+        data = {'track': new_track.pk, 'playlist': self.playlist.pk}
+        response = self.client.post(reverse('playlistviewset-list'), data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['msg'], 'Track added successfully!')
