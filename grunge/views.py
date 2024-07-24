@@ -8,7 +8,7 @@ from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from .models import Playlist, TrackAndOrder
+from .models import Playlist, TrackAndOrder, Track
 from .forms import PlaylistForm, PlaylistTrackFormSet, PlaylistTrackForm
 
 
@@ -24,6 +24,7 @@ class PlaylistDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['form'] = PlaylistTrackForm()
+
         return context
 
     def post(self, request, *args, **kwargs):
@@ -99,12 +100,12 @@ class PlaylistUpdateView(UpdateView):
 
         return super().form_valid(form)
 
-
+@method_decorator(csrf_exempt, name='dispatch')
 class PlaylistDeleteView(DeleteView):
     model = Playlist
     template_name = "playlists/playlist_confirm_delete.html"
     success_url = "/playlists/"
-
+@method_decorator(csrf_exempt, name='dispatch')
 class PlaylistAddTracksView(UpdateView):
     model = Playlist
     form_class = PlaylistForm
@@ -122,5 +123,35 @@ class PlaylistAddTracksView(UpdateView):
         context = self.get_context_data()
         tracks = context["tracks"]
         if tracks.is_valid():
+
             tracks.save()
         return super().form_valid(form)
+@csrf_exempt
+def change_track_order(request, pk):
+    playlist = get_object_or_404(Playlist, pk=pk)
+    if request.method == 'POST':
+        track_id = request.POST.get('track_id')
+        new_position = int(request.POST.get('order'))
+        playlist_tracks = TrackAndOrder.objects.filter(playlist=playlist).order_by('order')
+        track = get_object_or_404(Track, pk=track_id)
+        new_position = min(new_position, playlist_tracks.count())
+        current_track = playlist_tracks.get(track=track)
+        current_order = current_track.order
+
+        if current_order < new_position:
+            # Moving the track down
+            for track in playlist_tracks:
+                if current_order < track.order <= new_position:
+                    track.order -= 1
+                    track.save()
+        elif current_order > new_position:
+            # Moving the track up
+            for track in playlist_tracks:
+                if new_position <= track.order < current_order:
+                    track.order += 1
+                    track.save()
+
+        current_track.order = new_position
+        current_track.save()
+
+    return redirect(reverse('playlist_detail', args=[pk]))

@@ -1,5 +1,6 @@
 import pdb
 
+from django.db.models import F
 from rest_framework import viewsets, status
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
@@ -86,6 +87,7 @@ class PlaylistViewSet(viewsets.ModelViewSet):
         return Response(serialized_data.data, status=status.HTTP_200_OK)
 
     def create(self, request, *args, **kwargs):
+
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -99,9 +101,12 @@ class PlaylistViewSet(viewsets.ModelViewSet):
         return Response(serialized_data.data, status=status.HTTP_200_OK)
 
     def destroy(self, request, version, pk=None):
+        pdb.set_trace()
         playlist = get_object_or_404(self.queryset, pk=pk)
+
         if playlist:
             playlist.delete()
+            TrackAndOrder.object.filter(playlist=playlist.playlist, order__gte=playlist.order).update(order=F('order') - 1)
             return Response({"msg": "Deleted Successfully!"}, status=status.HTTP_200_OK)
         else:
             return Response({"msg": "Unable to delete!"}, status=status.HTTP_200_OK)
@@ -110,8 +115,8 @@ class PlaylistViewSet(viewsets.ModelViewSet):
             url_path='reorder1/(?P<track_id>[^/.]+)/(?P<playlist_id>[^/.]+)/(?P<position>[^/.]+)')
     def reorder(self, request, version, track_id, playlist_id, position, *args, **kwargs):
         position = int(position)
-        playlist_tracks = TrackAndOrder.objects.filter(playlist_id=playlist_id).order_by('order')
-        position = max(position, playlist_tracks.count())
+        playlist_tracks = TrackAndOrder.objects.filter(playlist_id=playlist_id)
+        position = min(position, playlist_tracks.count())
         current_track = playlist_tracks.get(track_id=track_id)
         current_order = current_track.order
 

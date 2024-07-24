@@ -1,3 +1,5 @@
+import pdb
+
 from furl import furl
 from rest_framework import serializers
 from rest_framework.reverse import reverse as drf_reverse
@@ -97,6 +99,11 @@ class TrackAndOrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = TrackAndOrder
         read_only_fields = ("uuid","order","track_name","playlist_name")
-        fields = ("id","uuid","track", "playlist","order","track_name","playlist_name","playlist_id","track_id")
+        fields = ("uuid","track", "playlist","order","track_name","playlist_name","playlist_id","track_id")
 
+    def save(self, **kwargs):
+        if TrackAndOrder.objects.filter(playlist=self.validated_data['playlist'],track=self.validated_data['track']).exists():
+            return TrackAndOrder.objects.filter(playlist=self.validated_data['playlist'],track=self.validated_data['track'])
+        order =  TrackAndOrder.objects.filter(playlist=self.validated_data['playlist']).count()+1
 
+        return TrackAndOrder.objects.create(playlist=self.validated_data['playlist'],track=self.validated_data['track'], order=order)
