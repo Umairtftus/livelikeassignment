@@ -40,7 +40,7 @@ class PlaylistCreateView(CreateView):
     template_name = "playlists/playlist_form.html"
     success_url = reverse_lazy("playlist_list")
 
-
+@method_decorator(csrf_exempt, name='dispatch')
 class PlaylistUpdateView(UpdateView):
     model = Playlist
     form_class = PlaylistForm
