@@ -2,14 +2,16 @@
 {% load static %}
 {% block title %}Playlist Dashboard{% endblock title %}
 {% block body %}
+<div class="container">
 <h2>Add Tracks to Playlist</h2>
-<form method="post">
+<form class="form-group" method="post">
     {% csrf_token %}
-    {{ form.as_p }}
+    {{ form.as_ul }}
     {{ tracks.management_form }}
     {% for form in tracks %}
-        {{ form.as_p }}
-        <button type="submit">Save</button>
+        {{ form.as_ul }}
+        <button class="btn btn-primary m-2" type="submit">Save</button>
     {% endfor %}
 </form>
+    <div>
 {% endblock body %}

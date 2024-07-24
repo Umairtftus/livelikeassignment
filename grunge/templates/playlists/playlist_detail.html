@@ -1,24 +1,50 @@
-<!-- playlist_detail.html -->
-
-
-
-{% block content %}
-  <h2>{{ object.name }}</h2>
+{% extends 'playlists/base.html' %}
+{% load static %}
+{% block title %}Playlist Dashboard{% endblock title %}
+{% block body %}
+<div class="container">
+  <h2>Playlist Name: {{ object.name }}</h2>
+  <div class="row">
+    <div class="col-md-3">
+      <a class="btn btn-primary" href="{% url 'playlist_update' object.pk %}">Edit Playlist</a>
+    </div>
+    <div class="col-md-3">
+      <a class="btn btn-danger" href="{% url 'playlist_delete' object.pk %}">Delete Playlist</a>
+    </div>
+    <div class="col-md-3">
+      <a class="btn btn-secondary" href="{% url 'playlist_list' %}">Back to playlists</a>
+    </div>
+    <div class="col-md-3">
+      <a class="btn btn-primary" href="{% url 'playlist_add_tracks' object.pk %}">Add Tracks</a>
+    </div>
+  </div>
+  {% if object.playlist_tracks.all|length < 1 %}
+  <h3 class="m-5"style="text-align:center;">No tracks in playlist! Click on <a href="{% url 'playlist_add_tracks' object.pk %}">here</a> to add tracks</h3>
+  {% else %}
   <ul>
     {% for playlist_track in object.playlist_tracks.all %}
+    <div class="row m-3">
       <li>
-        <form method="post" action="{% url 'change_track_order' object.pk %}">
+        <form class="form-control"  method="post" action="{% url 'change_track_order' object.pk %}">
           {% csrf_token %}
           <input type="hidden" name="track_id" value="{{ playlist_track.track.pk }}">
-          {{ playlist_track.track.name }} - Order:
-          <input type="number" name="order" value="{{ playlist_track.order }}" min="1">
-          <button type="submit">Change Order</button>
+          <strong>Song Name: {{ playlist_track.track.name }}<strong> - Order:
+            <div class="col-md-12">
+              <div class="row">
+                <div class="col-md-6">
+                  <input class="form-control" type="number" name="order" value="{{ playlist_track.order }}" min="1">
+                </div>
+                <div class="col-md-6">
+                  <button class="btn btn-primary col-md-3" type="submit" style>Change Order</button>
+                </div>
+              </div>
+            </div>
         </form>
       </li>
+    </div>
     {% endfor %}
   </ul>
-  <a href="{% url 'playlist_update' object.pk %}">Edit</a>
-  <a href="{% url 'playlist_delete' object.pk %}">Delete</a>
-  <a href="{% url 'playlist_list' %}">Back to playlists</a>
-  <a href="{% url 'playlist_add_tracks' object.pk %}">Add Tracks</a>
-{% endblock %}
+  {% endif %}
+
+</div>
+{% endblock body %}

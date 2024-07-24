@@ -14,7 +14,7 @@ from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from .views import PlaylistListView, PlaylistDetailView, PlaylistCreateView, PlaylistUpdateView, PlaylistDeleteView, \
-    PlaylistAddTracksView, change_track_order
+    PlaylistAddTracksView, ChangeOrder
 from .viewsets import AlbumViewSet, ArtistViewSet, TrackViewSet, PlaylistNameViewSet, PlaylistViewSet
 
 schema_view = get_schema_view(
@@ -34,14 +34,15 @@ urlpatterns = []
 
 if settings.DJANGO_ADMIN_ENABLED:
     urlpatterns += [
-        re_path("^$", RedirectView.as_view(url="/admin/", permanent=True)),
+        re_path("^$", RedirectView.as_view(url="/dashboard/", permanent=True)),
+        path("dashboard", PlaylistListView.as_view(), name="dashboard"),
         path("playlists/", PlaylistListView.as_view(), name="playlist_list"),
         path("playlists/<int:pk>/", PlaylistDetailView.as_view(), name="playlist_detail"),
         path("playlists/create/", PlaylistCreateView.as_view(), name="playlist_create"),
         path("playlists/<int:pk>/add-tracks/", PlaylistAddTracksView.as_view(), name="playlist_add_tracks"),
         path("playlists/<int:pk>/update/", PlaylistUpdateView.as_view(), name="playlist_update"),
         path("playlists/<int:pk>/delete/", PlaylistDeleteView.as_view(), name="playlist_delete"),
-        path("playlists/<int:pk>/change-order/", change_track_order, name="change_track_order"),
+        path("playlists/<int:pk>/change-order/", ChangeOrder.as_view(), name="change_track_order"),
         path("admin/", admin.site.urls),
     ]
 
