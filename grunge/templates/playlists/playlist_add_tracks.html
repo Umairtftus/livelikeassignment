@@ -1,4 +1,7 @@
-<!-- templates/playlists/playlist_add_tracks.html -->
+{% extends 'playlists/base.html' %}
+{% load static %}
+{% block title %}Playlist Dashboard{% endblock title %}
+{% block body %}
 <h2>Add Tracks to Playlist</h2>
 <form method="post">
     {% csrf_token %}
@@ -9,3 +12,4 @@
         <button type="submit">Save</button>
     {% endfor %}
 </form>
+{% endblock body %}

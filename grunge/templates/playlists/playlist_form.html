@@ -1,7 +1,12 @@
-<!-- templates/playlists/playlist_form.html -->
+{% extends 'playlists/base.html' %}
+{% load static %}
+{% block title %}Playlist Dashboard{% endblock title %}
+{% block body %}
 <h2>Create Playlist</h2>
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit">Save</button>
 </form>
+
+{% endblock body %}

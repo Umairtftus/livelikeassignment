@@ -1,8 +1,8 @@
-<!-- templates/playlists/playlist_order_form.html -->
-
-
-{% block content %}
-  <h2>Update Order for {{ playlist.name }}</h2>
+{% extends 'playlists/base.html' %}
+{% load static %}
+{% block title %}Playlist Dashboard{% endblock title %}
+{% block body %}
+<h2>Update Order for {{ playlist.name }}</h2>
   <form method="post">
     {% csrf_token %}
     {{ formset.management_form }}
@@ -18,4 +18,4 @@
     <button type="submit">Save Order</button>
   </form>
   <a href="{% url 'playlist_detail' playlist.pk %}">Cancel</a>
-{% endblock %}
+{% endblock body %}
