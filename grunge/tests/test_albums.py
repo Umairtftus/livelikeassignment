@@ -1,11 +1,14 @@
+import os
 from uuid import UUID
 
+import django
 from furl import furl
 from rest_framework import status
 from rest_framework.reverse import reverse as drf_reverse
 
 from . import BaseAPITestCase
-
+os.environ['DJANGO_SETTINGS_MODULE'] = 'grunge.settings'
+django.setup()
 
 class AlbumTests(BaseAPITestCase):
     def setUp(self):

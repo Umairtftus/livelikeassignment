@@ -127,3 +127,42 @@ class TrackAndOrder(UUIDModel):
     @property
     def name(self):
         return self.track.name
+
+
+class Playlist(UUIDModel):
+    name = models.CharField(max_length=100, help_text=_("The playlist name"))
+
+    class Meta:
+        ordering = ("name",)
+        indexes = (models.Index(fields=("name",)),)
+
+    def __str__(self):
+        return self.name
+
+
+class TrackAndOrder(UUIDModel):
+    track = models.ForeignKey(Track, help_text=_("Track refers to the playlist"),
+                              related_name="track",
+                              on_delete=models.CASCADE)
+
+    order = models.PositiveIntegerField(help_text=_("The Track number on the playlist"), null=True, blank=True)
+    playlist = models.ForeignKey(Playlist, null=True, help_text=_("The playlist of the track"),
+                                 related_name="playlist",
+                                 on_delete=models.CASCADE)
+
+
+    def get_absolute_url(self):
+        return reverse("admin:grunge_trackandorder_change", kwargs={"object_id": self.pk})
+
+    class Meta:
+        ordering = ("playlist", "track", "order")
+        indexes = (models.Index(fields=("order", "playlist", "track")),)
+        constraints = (models.UniqueConstraint(
+            fields=("playlist", "track"), name="unique_track"),)
+
+    def __str__(self):
+        return self.playlist.name + "-" + self.track.name
+
+    @property
+    def name(self):
+        return self.track.name

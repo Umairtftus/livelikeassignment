@@ -1,10 +1,13 @@
+import pdb
+
 from rest_framework import viewsets, status
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from .filters import AlbumFilter, ArtistFilter, TrackFilter, TrackAndOrderFilter, PlaylistNameFilter
 from .models import Album, Artist, Track, TrackAndOrder, Playlist
-from .serializers import AlbumSerializer, ArtistSerializer, TrackSerializer, PlaylistNameSerializer, TrackAndOrderSerializer
+from .serializers import AlbumSerializer, ArtistSerializer, TrackSerializer, PlaylistNameSerializer, \
+    TrackAndOrderSerializer
 
 
 class BaseAPIViewSet(viewsets.ReadOnlyModelViewSet):
@@ -51,13 +54,13 @@ class PlaylistNameViewSet(viewsets.ModelViewSet):
         serialized_data = self.serializer_class(self.queryset, many=True)
         return Response(serialized_data.data, status=status.HTTP_200_OK)
 
-    def create(self, request,*args, **kwargs):
+    def create(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response({"msg": "Playlist added successfully!"}, status=status.HTTP_200_OK)
         else:
-            return Response({"msg": "Unable to add playlist !!"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"msg": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
     def retrieve(self, request, version, pk=None):
         playlist = get_object_or_404(self.queryset, pk=pk)
@@ -78,11 +81,11 @@ class PlaylistViewSet(viewsets.ModelViewSet):
     serializer_class = TrackAndOrderSerializer
     filter_class = TrackAndOrderFilter
 
-    def list(self, request,version):
+    def list(self, request, version):
         serialized_data = self.serializer_class(self.queryset, many=True)
-        return Response(serialized_data.data,status=status.HTTP_200_OK)
+        return Response(serialized_data.data, status=status.HTTP_200_OK)
 
-    def create(self, request,*args, **kwargs):
+    def create(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -90,7 +93,7 @@ class PlaylistViewSet(viewsets.ModelViewSet):
         else:
             return Response({"msg": "Unable to add track !!"}, status=status.HTTP_400_BAD_REQUEST)
 
-    def retrieve(self, request, version, pk=None ):
+    def retrieve(self, request, version, pk=None):
         playlist = get_object_or_404(self.queryset, pk=pk)
         serialized_data = self.serializer_class(playlist)
         return Response(serialized_data.data, status=status.HTTP_200_OK)
@@ -103,12 +106,28 @@ class PlaylistViewSet(viewsets.ModelViewSet):
         else:
             return Response({"msg": "Unable to delete!"}, status=status.HTTP_200_OK)
 
-    @action(detail=True, methods=['PATCH'], name='Reorder Track', url_path="reorder1/<str:trackid>/<str:position>/")
-    def reorder(self, request, version, trackid, position, *args, **kwargs):
-        track_ans_order = self.get_object()
-        curr_track = track_ans_order.get()
-        return Response({"msg": "Successfully fetched!"})
+    @action(detail=False, methods=['patch'],
+            url_path='reorder1/(?P<track_id>[^/.]+)/(?P<playlist_id>[^/.]+)/(?P<position>[^/.]+)')
+    def reorder(self, request, version, track_id, playlist_id, position, *args, **kwargs):
+        position = int(position)
+        playlist_tracks = TrackAndOrder.objects.filter(playlist_id=playlist_id).order_by('order')
+        current_track = playlist_tracks.get(track_id=track_id)
+        current_order = current_track.order
 
+        if current_order < position:
+            # Moving the track down
+            for track in playlist_tracks:
+                if current_order < track.order <= position:
+                    track.order -= 1
+                    track.save()
+        elif current_order > position:
+            # Moving the track up
+            for track in playlist_tracks:
+                if position <= track.order < current_order:
+                    track.order += 1
+                    track.save()
 
+        current_track.order = position
+        current_track.save()
 
-
+        return Response({"msg": "Successfully reordered!"})
