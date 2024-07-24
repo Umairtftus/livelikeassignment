@@ -3,13 +3,13 @@
 {% block title %}Playlist Dashboard{% endblock title %}
 {% block body %}
 <h2>Add Tracks to Playlist</h2>
-<form method="post">
+<form class="form-control" method="post">
     {% csrf_token %}
     {{ form.as_p }}
     {{ tracks.management_form }}
     {% for form in tracks %}
         {{ form.as_p }}
-        <button type="submit">Save</button>
+        <button class="btn btn-primary" type="submit">Save</button>
     {% endfor %}
 </form>
 {% endblock body %}

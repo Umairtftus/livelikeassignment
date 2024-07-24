@@ -19,7 +19,8 @@ urlpatterns = []
 
 if settings.DJANGO_ADMIN_ENABLED:
     urlpatterns += [
-        re_path("^$", RedirectView.as_view(url="/admin/", permanent=True)),
+        re_path("^$", RedirectView.as_view(url="/dashboard/", permanent=True)),
+        path("dashboard", PlaylistListView.as_view(), name="dashboard"),
         path("playlists/", PlaylistListView.as_view(), name="playlist_list"),
         path("playlists/<int:pk>/", PlaylistDetailView.as_view(), name="playlist_detail"),
         path("playlists/create/", PlaylistCreateView.as_view(), name="playlist_create"),
