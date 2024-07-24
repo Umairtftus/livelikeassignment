@@ -96,6 +96,8 @@ class Playlist(UUIDModel):
     def __str__(self):
         return self.name
 
+    def get_absolute_url(self):
+        return reverse("playlist_detail", kwargs={"pk": self.pk})
 
 class TrackAndOrder(UUIDModel):
     track = models.ForeignKey(Track, help_text=_("Track refers to the playlist"),

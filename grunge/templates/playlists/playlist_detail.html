@@ -1,13 +1,20 @@
-{% extends "base_generic.html" %}
+{% extends "base.html" %}
 
 {% block content %}
-  <h2>{{ object.name }}</h2>
+  <h2>{{ playlist.name }}</h2>
   <ul>
-    {% for playlist_track in object.playlist_tracks.all %}
+    {% for playlist_track in playlist.playlist_tracks.all %}
       <li>{{ playlist_track.order }}: {{ playlist_track.track.name }}</li>
     {% endfor %}
   </ul>
-  <a href="{% url 'playlist_update' object.pk %}">Edit</a>
-  <a href="{% url 'playlist_delete' object.pk %}">Delete</a>
+  <a href="{% url 'playlist_update' playlist.pk %}">Edit</a>
+  <a href="{% url 'playlist_delete' playlist.pk %}">Delete</a>
   <a href="{% url 'playlist_list' %}">Back to playlists</a>
+
+  <h3>Add Track</h3>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Add Track</button>
+  </form>
 {% endblock %}
