@@ -33,7 +33,7 @@ if settings.DJANGO_API_ENABLED:
     api_router.register("artists", ArtistViewSet)
     api_router.register("albums", AlbumViewSet)
     api_router.register("tracks", TrackViewSet)
-    api_router.register("playlist1", PlaylistNameViewSet, basename="_playlist")
+    api_router.register("playlists", PlaylistNameViewSet, basename="_playlist")
     api_router.register("playlisttrack", PlaylistViewSet, basename='playlisttrack')
 
     urlpatterns += [

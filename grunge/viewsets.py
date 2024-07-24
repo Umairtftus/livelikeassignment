@@ -111,6 +111,7 @@ class PlaylistViewSet(viewsets.ModelViewSet):
     def reorder(self, request, version, track_id, playlist_id, position, *args, **kwargs):
         position = int(position)
         playlist_tracks = TrackAndOrder.objects.filter(playlist_id=playlist_id).order_by('order')
+        position = max(position, playlist_tracks.count())
         current_track = playlist_tracks.get(track_id=track_id)
         current_order = current_track.order
 
@@ -128,6 +129,7 @@ class PlaylistViewSet(viewsets.ModelViewSet):
                     track.save()
 
         current_track.order = position
+
         current_track.save()
 
         return Response({"msg": "Successfully reordered!"})
