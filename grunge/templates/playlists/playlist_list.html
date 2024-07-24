@@ -1,6 +1,7 @@
-{% extends "base_generic.html" %}
-
-{% block content %}
+{% extends 'playlists/base.html' %}
+{% load static %}
+{% block title %}Playlist Dashboard{% endblock title %}
+{% block body %}
   <h2>Playlists</h2>
   <ul>
     {% for playlist in object_list %}

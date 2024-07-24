@@ -4,6 +4,12 @@ from django.urls import include, path, re_path
 from django.views.generic.base import RedirectView
 from rest_framework.routers import DefaultRouter
 
+from django.conf import settings
+from django.conf.urls.static import static
+from django.urls import re_path
+from django.views.static import serve
+
+
 from .views import PlaylistListView, PlaylistDetailView, PlaylistCreateView, PlaylistUpdateView, PlaylistDeleteView
 from .viewsets import AlbumViewSet, ArtistViewSet, TrackViewSet, PlaylistNameViewSet, PlaylistViewSet
 
@@ -33,3 +39,10 @@ if settings.DJANGO_API_ENABLED:
     urlpatterns += [
         path("api/<version>/", include(api_router.urls)),
     ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+else:
+    urlpatterns.append(
+        re_path(r"^static/(?P<path>.*)$", serve, {"document_root": settings.STATIC_ROOT})
+    )
