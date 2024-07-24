@@ -106,7 +106,7 @@ class PlaylistViewSet(viewsets.ModelViewSet):
             return Response({"msg": "Unable to delete!"}, status=status.HTTP_200_OK)
 
     @action(detail=False, methods=['patch'],
-            url_path='reorder1/(?P<track_id>[^/.]+)/(?P<playlist_id>[^/.]+)/(?P<position>[^/.]+)')
+            url_path='reorder/(?P<track_id>[^/.]+)/(?P<playlist_id>[^/.]+)/(?P<position>[^/.]+)')
     def reorder(self, request, version, track_id, playlist_id, position, *args, **kwargs):
         position = int(position)
         playlist_tracks = TrackAndOrder.objects.filter(playlist_id=playlist_id)
