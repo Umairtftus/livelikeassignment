@@ -90,11 +90,13 @@ class TrackAndOrderSerializer(serializers.ModelSerializer):
     uuid = serializers.ReadOnlyField()
     order = serializers.ReadOnlyField()
     track_name = serializers.ReadOnlyField(source="track.name")
+    track_id = serializers.ReadOnlyField(source="track.id")
     playlist_name = serializers.ReadOnlyField(source="playlist.name")
+    playlist_id = serializers.ReadOnlyField(source="playlist.id")
 
     class Meta:
         model = TrackAndOrder
         read_only_fields = ("uuid","order","track_name","playlist_name")
-        fields = ("uuid","track", "playlist","order","track_name","playlist_name")
+        fields = ("id","uuid","track", "playlist","order","track_name","playlist_name","playlist_id","track_id")
 
 
