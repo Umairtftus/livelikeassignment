@@ -91,6 +91,7 @@ class PlaylistViewSet(viewsets.ModelViewSet):
 
         if playlist:
             playlist.delete()
+            # Reordering the playlist order
             TrackAndOrder.object.filter(playlist=playlist.playlist, order__gte=playlist.order).update(order=F('order') - 1)
             return Response({"msg": "Deleted Successfully!"}, status=status.HTTP_200_OK)
         else:
@@ -119,7 +120,5 @@ class PlaylistViewSet(viewsets.ModelViewSet):
                     track.save()
 
         current_track.order = position
-
         current_track.save()
-
         return Response({"msg": "Successfully reordered!"})

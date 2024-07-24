@@ -2,11 +2,13 @@
 {% load static %}
 {% block title %}Playlist Dashboard{% endblock title %}
 {% block body %}
+<div class="container">
 <h2>Create Playlist</h2>
-<form method="post">
+<form class="form-control" method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">Save</button>
+    <button class="btn btn-primary" type="submit">Save</button>
+    <a class="btn btn-secondary" href="{% url 'playlist_list' %}">Back to playlists</a>
 </form>
-
+    </div>
 {% endblock body %}

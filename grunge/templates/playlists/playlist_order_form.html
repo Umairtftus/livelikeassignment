@@ -1,12 +1,12 @@
 {% extends 'playlists/base.html' %}
 {% load static %}
-{% block title %}Playlist Dashboard{% endblock title %}
+{% block title %}Playlist ss{% endblock title %}
 {% block body %}
 <h2>Update Order for {{ playlist.name }}</h2>
-  <form method="post">
+  <form class="form-control" method="post">
     {% csrf_token %}
     {{ formset.management_form }}
-    <table>
+    <table class="table table-bordered">
       {% for form in formset %}
         <tr>
           <td>{{ form.track.label_tag }} {{ form.track }}</td>
